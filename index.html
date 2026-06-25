@@ -68,7 +68,7 @@
         .c-white { color: #ffffff; }
         
         .scroll-wrapper { overflow: hidden; white-space: nowrap; width: 100%; box-sizing: border-box; display: block; }
-        .scroll-text { display: inline-block; padding-left: 100%; animation: cell-marquee 12s linear infinite; }
+        .scroll-text { display: inline-block; padding-left: 100%; animation: cell-marquee 4.5s linear infinite; } /* 修正：縮短到 4.5 秒加速滾動 */
         @keyframes cell-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
         .pids-marquee-container { border-top: 1px solid #151515; margin-top: 25px; padding-top: 15px; overflow: hidden; white-space: nowrap; }
@@ -402,7 +402,7 @@
                 pidsLang = (pidsLang === 'zh') ? 'en' : 'zh';
             }
             updateData();
-        }, 5000);
+        }, 8000);
         
         setInterval(() => {
             let [h, m] = document.getElementById('sysTime').value.split(':').map(Number);
