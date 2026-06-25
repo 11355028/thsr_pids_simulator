@@ -60,8 +60,8 @@
         .pids-table td { font-size: 34px; font-weight: bold; padding: 20px 2px; white-space: nowrap; overflow: hidden; }
         
         .col-num { width: 12%; }
-        .col-time { width: 15%; }
         .col-dest { width: 18%; }
+        .col-time { width: 15%; }
         .col-plat { width: 12%; }
         .col-status { width: 43%; }
 
@@ -132,8 +132,8 @@
                     <thead>
                         <tr>
                             <th class="col-num">車次 No.</th>
+                            <th class="col-dest">開往 Bound for</th>
                             <th class="col-time">時間 Time</th>
-                            <th class="col-dest">終點站 Dest.</th>
                             <th class="col-plat">月台 Plat.</th>
                             <th class="col-status">動態資訊 Train Status & Information</th>
                         </tr>
@@ -148,8 +148,8 @@
                     <thead>
                         <tr>
                             <th class="col-num">車次 No.</th>
+                            <th class="col-dest">開往 Bound for</th>
                             <th class="col-time">時間 Time</th>
-                            <th class="col-dest">終點站 Dest.</th>
                             <th class="col-plat">月台 Plat.</th>
                             <th class="col-status">動態資訊 Train Status & Information</th>
                         </tr>
@@ -329,8 +329,8 @@
 
                 html += `<tr>
                     <td><span class="c-white">${t.num}</span></td>
-                    <td><span class="c-white">${t.time}</span></td>
                     <td><span class="${dirClass}">${pidsLang==='zh'?t.dest:t.destEn}</span></td>
+                    <td><span class="c-white">${t.time}</span></td>
                     <td><span class="${dirClass}">${t.plat}</span></td>
                     <td style="font-size:22px; text-align:left; padding-left:15px; overflow:hidden;">${finalStatusHtml}</td>
                 </tr>`;
