@@ -20,7 +20,7 @@
         
         .direction-vertical-container { display: flex; flex-direction: column; gap: 20px; }
         .direction-box { background-color: #141517; padding: 20px; border-radius: 8px; border: 1px solid #2c2e33; }
-        .south-box { border-top: 4px solid #ff7300; }
+        .south-box { border-top: 4px solid #00e676; }
         .north-box { border-top: 4px solid #00a2ff; }
         
         .train-card { background: #1a1b1e; padding: 15px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #2c2e33; }
@@ -43,16 +43,17 @@
         .action-btn:hover { background: #ff6b6b; }
         
         .station-pids { position: relative; background-color: #050505; border: 6px solid #1a1b1e; border-radius: 12px; padding: 25px; box-shadow: 0 16px 36px rgba(0,0,0,0.9); }
-        
-        /* 全螢幕樣式優化 */
         .station-pids:fullscreen { padding: 40px; border: none; border-radius: 0; display: flex; flex-direction: column; justify-content: space-between; background-color: #000000; width: 100vw; height: 100vh; box-sizing: border-box; }
         
         .pids-header { display: flex; justify-content: space-between; color: #ff7300; font-size: 26px; font-weight: bold; border-bottom: 2px solid #222; padding-bottom: 12px; margin-bottom: 25px; align-items: center; }
         .pids-boards { display: flex; flex-direction: column; gap: 35px; }
         .pids-sub-board { background: #000; border: 1px solid #111; padding: 15px; border-radius: 8px; }
         .board-title { font-size: 28px; font-weight: bold; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #151515; }
-        .title-south { color: #ff7300; }
-        .title-north { color: #00a2ff; }
+        
+        /* 顏色樣式定義 */
+        .title-south, .c-south { color: #00e676; } /* 南下綠色 */
+        .title-north, .c-north { color: #00a2ff; } /* 北上藍色 */
+        .c-status-delay { color: #ffd43b; }        /* 延遲黃色 */
 
         .pids-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed; }
         .pids-table th { color: #555555; font-size: 18px; padding-bottom: 12px; border-bottom: 2px solid #151515;}
@@ -64,12 +65,8 @@
         .col-plat { width: 12%; }
         .col-status { width: 43%; }
 
-        .c-orange { color: #ff7300; }
         .c-white { color: #ffffff; }
-        .c-green { color: #00e676; }
-        .c-status-delay { color: #ff3b30; }
         
-        /* 內嵌單元格跑馬燈滾動特效 */
         .scroll-wrapper { overflow: hidden; white-space: nowrap; width: 100%; box-sizing: border-box; display: block; }
         .scroll-text { display: inline-block; padding-left: 100%; animation: cell-marquee 12s linear infinite; }
         @keyframes cell-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -293,13 +290,14 @@
         const trains = getTrainData(dir);
         const tbody = document.getElementById(`pids-${dir}-body`);
         let html = '';
+        const dirClass = dir === 'south' ? 'c-south' : 'c-north'; 
 
         for (let i = 0; i < 2; i++) {
             const t = trains[i];
             if (t) {
                 let infoText = "";
-                let cellClass = "c-green";
-                let useScroll = false; // 是否對該狀態啟用滾動跑馬燈
+                let cellClass = dir === 'south' ? 'c-south' : 'c-north'; 
+                let useScroll = false; 
 
                 if (pidsLang === 'zh') {
                     if (displayStage === 0) {
@@ -308,7 +306,7 @@
                     } else if (displayStage === 1) {
                         const names = t.stops.map(idx => thsrStations[idx]);
                         infoText = names.length > 0 ? "停靠站：" + names.join('→') : "直達車";
-                        if(names.length > 0) useScroll = true; // 停靠站啟用滾動
+                        if(names.length > 0) useScroll = true; 
                     } else {
                         infoText = t.cars.length > 0 ? `自由座車廂：${t.cars.join(',')} 車` : "全車對號座";
                     }
@@ -319,22 +317,21 @@
                     } else if (displayStage === 1) {
                         const names = t.stops.map(idx => thsrStationsEn[idx]);
                         infoText = names.length > 0 ? "Stops: " + names.join('-') : "Non-stop Train";
-                        if(names.length > 0) useScroll = true; // 英文停靠站也啟用滾動
+                        if(names.length > 0) useScroll = true; 
                     } else {
                         infoText = t.cars.length > 0 ? `Non-Reserved: Cars ${t.cars.join(',')}` : "All Reserved";
                     }
                 }
 
-                // 根據狀態決定是否包裹跑馬燈外殼
                 const finalStatusHtml = useScroll 
                     ? `<div class="scroll-wrapper"><span class="${cellClass} scroll-text">${infoText}</span></div>`
                     : `<span class="${cellClass}">${infoText}</span>`;
 
                 html += `<tr>
-                    <td><span class="c-orange">${t.num}</span></td>
+                    <td><span class="c-white">${t.num}</span></td>
                     <td><span class="c-white">${t.time}</span></td>
-                    <td><span class="c-orange">${pidsLang==='zh'?t.dest:t.destEn}</span></td>
-                    <td><span class="c-white">${t.plat}</span></td>
+                    <td><span class="${dirClass}">${pidsLang==='zh'?t.dest:t.destEn}</span></td>
+                    <td><span class="${dirClass}">${t.plat}</span></td>
                     <td style="font-size:22px; text-align:left; padding-left:15px; overflow:hidden;">${finalStatusHtml}</td>
                 </tr>`;
             } else {
@@ -398,7 +395,6 @@
         generateFields('south', defaultSouth); generateFields('north', defaultNorth);
         updateData(); setTimeout(loadVoices, 600);
         
-        // 三滾動：全部輪流顯示完畢後才切換語言
         setInterval(() => {
             displayStage++;
             if (displayStage > 2) {
